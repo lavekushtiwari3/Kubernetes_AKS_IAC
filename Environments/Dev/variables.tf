@@ -1,0 +1,14 @@
+variable "rgs" {
+  type = map(any)
+}
+
+variable "vnets" {
+  type = map(any)
+}
+variable "snets" {
+  type = map(any)
+}
+
+variable "akss" {
+  type = map(any) 
+}
