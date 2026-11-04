@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    // Yaha hum koi bhi sensitive secret direct define nahi karenge
+    stages {
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Terraform Apply with Secure Credentials') {
+            steps {
+                // Jenkins Credentials ID ko secure tarike se environment variables me map karna
+                withCredentials([
+                    string(credentialsId: 'azure-client-id', variable: 'ARM_CLIENT_ID'),
+                    string(credentialsId: 'azure-client-secret', variable: 'ARM_SECRET_ID'), // ya jo bhi aapka secret ID ho
+                    string(credentialsId: 'azure-tenant-id', variable: 'ARM_TENANT_ID'),
+                    string(credentialsId: 'azure-subscription-id', variable: 'ARM_SUBSCRIPTION_ID')
+                ]) {
+                    // Ye variables sirf is block ke andar hi active rahenge aur logs me hide rahenge
+                    sh '''
+                        echo "Running Terraform securely..."
+                        terraform init
+                        terraform apply -auto-approve
+                    '''
+                }
+            }
+        }
+    }
+}
