@@ -22,7 +22,7 @@ pipeline {
                     sh '''
                         echo "Running Terraform securely..."
                         terraform init
-                        terraform apply -auto-approve
+                       # terraform apply -auto-approve
                     '''
                 }
             }
